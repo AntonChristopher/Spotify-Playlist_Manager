@@ -64,8 +64,8 @@ def delete_playlist(po):
 
 
 
-#VARIABLES 
-#Client variables
+    #VARIABLES 
+    #Client variables
 playlist_list = []
 client_id = os.getenv("SPOTIFY_CLIENT_ID")
 client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
@@ -74,21 +74,11 @@ scope = "user-top-read playlist-modify-private playlist-modify-public playlist-r
 
 #object of the Spotify class
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id=client_id,
-    client_secret=client_secret,
-    redirect_uri=redirect_uri,
-    scope=scope
-    ))
-
-options_list = [
-    "0. Quit the program",
-    "1. List your playlists",
-    "2. Create a playlist",
-    "3. Delete a playlist",  #should only be able to delete playlists created by the program
-    "4. List the tracks in a playlist",
-    "5. Add tracks to a playlist",
-    "6. Remove tracks from a playlist"
-]
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=redirect_uri,
+        scope=scope
+        ))
 
 # LOAD starting playlists
 for item in get_playlists():
@@ -96,77 +86,87 @@ for item in get_playlists():
         PlaylistOperations(sp, item["id"])
     )
 
+if __name__ == '__main__':
+    options_list = [
+        "0. Quit the program",
+        "1. List your playlists",
+        "2. Create a playlist",
+        "3. Delete a playlist",  #should only be able to delete playlists created by the program
+        "4. List the tracks in a playlist",
+        "5. Add tracks to a playlist",
+        "6. Remove tracks from a playlist"
+    ]
 
 
-user_choice = ""
-#User choice of action
-while (user_choice != "0"):
-    print("\n")
-    for s in options_list:
-        print(s)
-    user_choice = input("Enter the number of your choice: ")
-    print("\n")
+    user_choice = ""
+    #User choice of action
+    while (user_choice != "0"):
+        print("\n")
+        for s in options_list:
+            print(s)
+        user_choice = input("Enter the number of your choice: ")
+        print("\n")
 
-#operations on the list of playlists
-    #list playlists
-    if user_choice == "1":
-        listPlaylists()
+    #operations on the list of playlists
+        #list playlists
+        if user_choice == "1":
+            listPlaylists()
 
-    #create a playlist
-    elif user_choice == "2":
-        input_name = input("Enter the name of your new playlist: ")
-        did_create = createPlaylist(sp, input_name)
-        if did_create:
-            print("playlist ", input_name, " has been created!")
-        else:
-            print(input_name, "is already a playlist! Try a new name")
-
-    #Delete a playlist
-    elif user_choice == "3":
-        listPlaylists()
-        input_num = int(input("Enter the number of the playlist to delete: "))
-        if input_num < len(playlist_list):
-            delete_playlist(playlist_list[input_num])
-        else:
-            print("Index out of range, sorry")
-
-#Operations on a chosen playlist        
-    else:
-        listPlaylists()
-        if len(playlist_list) > 1:
-            input_num = int(input("Enter the number of your playlist choice: "))
-        else:
-            input_num = 0
-        if input_num < len(playlist_list):
-            playlist = playlist_list[input_num]
-        else:
-            print("Sorry, invalid choice")
-            continue
-
-        if user_choice == "4":
-            playlist.display_tracks()
-
-        elif user_choice == "5":
-            query = input("Enter song name (or song + artist): ").strip()
-            tracks = sp.search(q=query, type="track", limit=10)["tracks"]["items"]
-            if not tracks:
-                print("No songs found.")
+        #create a playlist
+        elif user_choice == "2":
+            input_name = input("Enter the name of your new playlist: ")
+            did_create = createPlaylist(sp, input_name)
+            if did_create:
+                print("playlist ", input_name, " has been created!")
             else:
-                count2 = 0
-                for t in tracks:
-                    print(count2, ". ", tracks[count2]["name"])
-                    count2 += 1
-                choice = int(input("Choose a song number: "))
-                track_id = tracks[choice]["id"]
-                playlist.add_tracks_to_playlist([track_id])
-                print(tracks[choice]["name"], " was added.")
-        
-        
-               
-        
+                print(input_name, "is already a playlist! Try a new name")
+
+        #Delete a playlist
+        elif user_choice == "3":
+            listPlaylists()
+            input_num = int(input("Enter the number of the playlist to delete: "))
+            if input_num < len(playlist_list):
+                delete_playlist(playlist_list[input_num])
+            else:
+                print("Index out of range, sorry")
+
+    #Operations on a chosen playlist        
+        else:
+            listPlaylists()
+            if len(playlist_list) > 1:
+                input_num = int(input("Enter the number of your playlist choice: "))
+            else:
+                input_num = 0
+            if input_num < len(playlist_list):
+                playlist = playlist_list[input_num]
+            else:
+                print("Sorry, invalid choice")
+                continue
+
+            if user_choice == "4":
+                playlist.display_tracks()
+
+            elif user_choice == "5":
+                query = input("Enter song name (or song + artist): ").strip()
+                tracks = sp.search(q=query, type="track", limit=10)["tracks"]["items"]
+                if not tracks:
+                    print("No songs found.")
+                else:
+                    count2 = 0
+                    for t in tracks:
+                        print(count2, ". ", tracks[count2]["name"])
+                        count2 += 1
+                    choice = int(input("Choose a song number: "))
+                    track_id = tracks[choice]["id"]
+                    playlist.add_tracks_to_playlist([track_id])
+                    print(tracks[choice]["name"], " was added.")
+            
+            
+                
+            
 
 
-print("\nThank you! Have a nice day!")
+    print("\nThank you! Have a nice day!")
 
 
 
