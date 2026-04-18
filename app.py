@@ -15,6 +15,10 @@ app = Flask(__name__)
 
 # Spotify connection — import this from PlaylistDriver instead of rewriting it
 
+@app.route('/')
+def homepage():
+    return "This is my awesome homepage.\nI hope you like my coolest of websites"
+
 @app.route('/playlists')
 def playlists():
     data = get_playlists()  # your function, unchanged
