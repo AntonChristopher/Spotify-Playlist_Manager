@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template  
 import os
 from dotenv import load_dotenv
 import spotipy
@@ -10,13 +10,13 @@ from PlaylistDriver import sp, playlist_list
 from PlaylistOperations import PlaylistOperations
 
 load_dotenv()
-
 app = Flask(__name__)
 
 # Spotify connection — import this from PlaylistDriver instead of rewriting it
 
 @app.route('/')
 def homepage():
+    render_template("index.html", playlist_list)
     return "This is my awesome homepage.\nI hope you like my coolest of websites"
 
 @app.route('/playlists')
@@ -27,30 +27,9 @@ def playlists():
 @app.route('/top-tracks')
 def top_tracks():
     results = sp.current_user_top_tracks(limit=10)
-    tracks = []
-    for track in results["items"]:
-        tracks.append({
-            "name": track["name"],
-            "artist": track["artists"][0]["name"]
-        })
+    tracks = [{"name": t["name"], "artist": t["artists"][0]["name"]} for t in results["items"]]
     return jsonify({"tracks": tracks})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

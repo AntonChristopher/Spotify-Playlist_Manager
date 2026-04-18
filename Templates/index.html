@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Spotify Manager</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <section>
+        <h1>Anton's Spotify Manager</h1>
+        {% for playlist in playlist_list %}
+            <div class="playlist">
+                <h2>{{ playlist.name }}</h2>
+                <p>{{ playlist.description }}</p>
+            </div>
+        {% endfor %}
+    </section>
+
+    <!--script src="/static/app.js"></script-->
+</body>
+</html>
