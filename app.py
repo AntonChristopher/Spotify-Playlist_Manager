@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    render_template("index.html", playlist_list)
+    render_template("index.html", playlists=playlist_list)
     return "This is my awesome homepage.\nI hope you like my coolest of websites"
 
 @app.route('/playlists')
