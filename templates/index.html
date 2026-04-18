@@ -11,8 +11,7 @@
         <h1>Anton's Spotify Manager</h1>
         {% for playlist in playlists %}
             <div class="playlist">
-                <h2>{{ playlist.name }}</h2>
-                <p>{{ playlist.description }}</p>
+                <h2>{{ playlist.playlist_name }}</h2>
             </div>
         {% endfor %}
     </section>
